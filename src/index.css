@@ -14,3 +14,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --backgroud: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
