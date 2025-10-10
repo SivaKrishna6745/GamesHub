@@ -21,6 +21,5 @@ export const gamesPlatforms = async (): Promise<gamePlatform[]> => {
     }
 
     const data = await response.json();
-    console.log(data.results);
     return data.results;
 };
