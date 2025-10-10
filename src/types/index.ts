@@ -25,3 +25,31 @@ export type gamePlatform = {
     year_start: number;
     year_end: number;
 };
+
+type gameResGenre = {
+    games_count: number;
+    id: string;
+    image_background: string;
+    name: string;
+    slug: string;
+};
+
+type platform = {
+    id: number;
+    name: number;
+    slug: number;
+};
+
+type platformEntry = {
+    platform: platform;
+};
+
+export type gameRes = {
+    added: number;
+    background_image: string;
+    genres: gameResGenre[];
+    id: number;
+    name: string;
+    parentPlatforms: platformEntry[];
+    rating: number;
+};
