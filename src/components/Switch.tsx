@@ -19,7 +19,9 @@ export const Switch = ({ id = 'switch-toggle', label, onToggle, toggled }: Switc
                     }`}
                 ></span>
             </label>
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id} className="text-gray-800 dark:text-gray-200">
+                {label}
+            </label>
         </div>
     );
 };
