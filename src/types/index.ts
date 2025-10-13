@@ -36,7 +36,7 @@ type gameResGenre = {
 
 type platform = {
     id: number;
-    name: number;
+    name: string;
     slug: number;
 };
 
@@ -51,5 +51,6 @@ export type gameRes = {
     id: number;
     name: string;
     parentPlatforms: platformEntry[];
+    platforms: platformEntry[];
     rating: number;
 };

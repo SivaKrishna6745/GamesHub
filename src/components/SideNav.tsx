@@ -1,3 +1,5 @@
+import useGamesStore from '../store/useGamesStore';
+import { Button } from './Button';
 import { Image } from './Image';
 
 type SideNavItem = {
@@ -12,6 +14,8 @@ interface SideNavProps {
 }
 
 const SideNav = ({ heading, items }: SideNavProps) => {
+    const { setActiveGenre } = useGamesStore();
+
     return (
         <>
             <nav className="flex flex-col">
@@ -21,7 +25,7 @@ const SideNav = ({ heading, items }: SideNavProps) => {
                         return (
                             <li key={item.id} className="flex items-center gap-4 text-gray-800 dark:text-gray-200">
                                 <Image src={item.src} className="rounded-lg h-8 w-8" />
-                                <span>{item.name}</span>
+                                <Button label={item.name} onClick={() => setActiveGenre(item.name)} />
                             </li>
                         );
                     })}

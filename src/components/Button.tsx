@@ -1,10 +1,15 @@
 interface ButtonProps {
     label: string;
+    onClick: () => void;
 }
 
-export const Button = ({ label }: ButtonProps) => {
+export const Button = ({ label, onClick }: ButtonProps) => {
     return (
-        <button type="button" className="border-none outline-none cursor-pointer hover:underline">
+        <button
+            type="button"
+            className="border-none outline-none cursor-pointer hover:underline active:font-bold"
+            onClick={onClick}
+        >
             {label}
         </button>
     );

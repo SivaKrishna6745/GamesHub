@@ -15,8 +15,9 @@ function App() {
     const [gameGenres, setGameGenres] = useState<gameGenre[]>([]);
     const [gamePlatforms, setGamePlatforms] = useState<gamePlatform[]>([]);
     const [gamesList, setGamesList] = useState<gameRes[]>([]);
+    const [filteredGamesList, setFilteredGameList] = useState<gameRes[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const { activePlatform, setActivePlatform } = useGamesStore();
+    const { activePlatform, activeGenre, setActivePlatform } = useGamesStore();
 
     const toggleDarkMode = () => {
         setIsDark(!isDark);
@@ -58,6 +59,29 @@ function App() {
         getGames();
     }, []);
 
+    useEffect(() => {
+        const genreFilter = activeGenre?.toLowerCase();
+        const platformFilter = activePlatform?.toLowerCase();
+
+        let filtered = gamesList;
+
+        if (genreFilter) {
+            filtered = filtered.filter((game) => {
+                const gameGenres = game.genres?.map((genre) => genre.name.toLowerCase()) || [];
+                return gameGenres.includes(genreFilter);
+            });
+        }
+
+        if (platformFilter) {
+            filtered = filtered.filter((game) => {
+                const gamePlatforms = game.platforms?.map((p) => p.platform.name.toLowerCase()) || [];
+                return gamePlatforms.includes(platformFilter);
+            });
+        }
+
+        setFilteredGameList(filtered);
+    }, [activeGenre, activePlatform, gamesList]);
+
     const handleSelect = (option: string) => {
         setActivePlatform(option);
     };
@@ -85,10 +109,14 @@ function App() {
                         head={activePlatform || 'Platforms'}
                         onSelect={handleSelect}
                     />
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                        {gamesList.map((g) => (
-                            <Card name={g.name} bgSrc={g.background_image} rating={g.rating} />
-                        ))}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredGamesList.length > 0 ? (
+                            filteredGamesList.map((g) => (
+                                <Card key={g.id} name={g.name} bgSrc={g.background_image} rating={g.rating} />
+                            ))
+                        ) : (
+                            <p>No Games Available!!</p>
+                        )}
                     </div>
                 </div>
             </main>
