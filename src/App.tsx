@@ -111,8 +111,14 @@ function App() {
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredGamesList.length > 0 ? (
-                            filteredGamesList.map((g) => (
-                                <Card key={g.id} name={g.name} bgSrc={g.background_image} rating={g.rating} />
+                            filteredGamesList.map((game) => (
+                                <Card
+                                    key={game.id}
+                                    name={game.name}
+                                    bgSrc={game.background_image}
+                                    rating={game.rating}
+                                    game={game}
+                                />
                             ))
                         ) : (
                             <p>No Games Available!!</p>
