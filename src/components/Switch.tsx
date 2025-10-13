@@ -7,15 +7,19 @@ interface SwitchProps {
 
 export const Switch = ({ id = 'switch-toggle', label, onToggle, toggled }: SwitchProps) => {
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
             <input type="checkbox" className="sr-only peer" id={id} onChange={onToggle} />
             <label
                 htmlFor={id}
-                className="cursor-pointer h-6 w-10 inline-flex items-center border border-black dark:border-white rounded-full"
+                className={`cursor-pointer h-5 w-10 inline-flex items-center border border-black dark:border-none rounded-full ${
+                    toggled && 'bg-green-500'
+                }`}
             >
                 <span
-                    className={`inline-block  h-4 w-4 bg-black dark:bg-white rounded-full transition-all duration-300 ease-in-out ${
-                        toggled ? 'translate-x-5' : 'translate-x-0.5'
+                    className={`inline-block h-5 w-5 scale-[0.8] bg-black dark:bg-gray-300 rounded-full transition-all duration-300 ease-in-out ${
+                        toggled
+                            ? 'translate-x-5 shadow-[0_2px_4px_rgba(0,0,0,1)] inset-shadow-[0_0_1px_rgba(0,0,0,1)]'
+                            : 'translate-x-0'
                     }`}
                 ></span>
             </label>
