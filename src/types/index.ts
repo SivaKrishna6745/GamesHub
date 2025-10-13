@@ -37,7 +37,7 @@ type gameResGenre = {
 type platform = {
     id: number;
     name: string;
-    slug: number;
+    slug: string;
 };
 
 type platformEntry = {
