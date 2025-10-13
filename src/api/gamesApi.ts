@@ -32,6 +32,5 @@ export const games = async (): Promise<gameRes[]> => {
     }
 
     const data = await response.json();
-    console.log(data.results);
     return data.results;
 };
