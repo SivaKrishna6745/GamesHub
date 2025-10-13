@@ -18,7 +18,7 @@ const CustomSelectbox = ({ head = 'Select', onSelect, options }: CustomSelectbox
     return (
         <div className="relative">
             <button
-                className="px-4 py-2 bg-white/20 dark:bg-black/20 hover:bg-black/20 hover:dark:bg-white/20 text-gray-800 dark:text-gray-200 rounded-md flex justify-between items-center cursor-pointer transition-all duration-200"
+                className="px-4 py-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 hover:dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md flex justify-between items-center cursor-pointer transition-all duration-200"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <span>{head}</span>
@@ -29,7 +29,7 @@ const CustomSelectbox = ({ head = 'Select', onSelect, options }: CustomSelectbox
                     {options.map((option) => (
                         <li
                             key={option.id}
-                            className="p-2 cursor-pointer hover:bg-black/30"
+                            className="p-2 cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-800"
                             onClick={() => {
                                 onSelect(option.name);
                                 setIsOpen(false);
