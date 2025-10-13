@@ -1,8 +1,8 @@
 interface ImageProps {
     src: string;
     alt?: string;
-    height?: number;
-    width?: number;
+    height?: number | string;
+    width?: number | string;
     className?: string;
 }
 

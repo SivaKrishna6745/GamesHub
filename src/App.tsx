@@ -8,6 +8,7 @@ import SideNav from './components/SideNav';
 import type { gameGenre, gamePlatform, gameRes } from './types';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
+import { Card } from './components/Card';
 
 function App() {
     const [isDark, setIsDark] = useState(false);
@@ -70,23 +71,25 @@ function App() {
                 <SearchBar />
                 <Switch id="light-dark" label="Dark Mode" onToggle={toggleDarkMode} toggled={isDark} />
             </header>
-            <main className="flex">
+            <main className="grid gap-4 grid-flow-col grid-cols-[1fr,3fr] place-items-start">
                 <SideNav
                     items={gameGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
                     heading={'Genres'}
                 />
-                <div className="">
-                    <div>
-                        <h2 className="mb-8 text-5xl font-bold text-gray-800 dark:text-gray-200">
-                            {activePlatform + ' Games' || 'Games'}
-                        </h2>
-                        <CustomSelectbox
-                            options={gamePlatforms.map((p) => ({ id: p.id, name: p.name }))}
-                            head={activePlatform || 'Platforms'}
-                            onSelect={handleSelect}
-                        />
+                <div className="flex flex-col items-start gap-8">
+                    <h2 className="text-5xl font-bold text-gray-800 dark:text-gray-200">
+                        {activePlatform + ' Games' || 'Games'}
+                    </h2>
+                    <CustomSelectbox
+                        options={gamePlatforms.map((p) => ({ id: p.id, name: p.name }))}
+                        head={activePlatform || 'Platforms'}
+                        onSelect={handleSelect}
+                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                        {gamesList.map((g) => (
+                            <Card name={g.name} bgSrc={g.background_image} rating={g.rating} />
+                        ))}
                     </div>
-                    <div></div>
                 </div>
             </main>
             <footer></footer>
