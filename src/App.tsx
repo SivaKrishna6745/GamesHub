@@ -95,7 +95,7 @@ function App() {
                 <SearchBar />
                 <Switch id="light-dark" label="Dark Mode" onToggle={toggleDarkMode} toggled={isDark} />
             </header>
-            <main className="grid gap-16 grid-flow-col grid-cols-[1fr,3fr] place-items-start">
+            <main className="grid gap-16 grid-flow-col grid-cols-[1fr_3fr] place-items-start">
                 <SideNav
                     items={gameGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
                     heading={'Genres'}
@@ -109,9 +109,9 @@ function App() {
                         head={activePlatform || 'Platforms'}
                         onSelect={handleSelect}
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredGamesList.length > 0 ? (
-                            filteredGamesList.map((game) => (
+                    {filteredGamesList.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {filteredGamesList.map((game) => (
                                 <Card
                                     key={game.id}
                                     name={game.name}
@@ -119,11 +119,11 @@ function App() {
                                     rating={game.rating}
                                     platforms={game.platforms}
                                 />
-                            ))
-                        ) : (
-                            <p>No Games Available!!</p>
-                        )}
-                    </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="my-10 text-gray-800 dark:text-gray-200 text-2xl">No Games Available!!</p>
+                    )}
                 </div>
             </main>
             <footer></footer>
