@@ -7,7 +7,7 @@ export const Button = ({ label, onClick }: ButtonProps) => {
     return (
         <button
             type="button"
-            className="border-none outline-none cursor-pointer hover:underline active:font-bold"
+            className="border-none outline-none cursor-pointer hover:underline focus:font-bold"
             onClick={onClick}
         >
             {label}
