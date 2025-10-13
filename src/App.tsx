@@ -117,7 +117,7 @@ function App() {
                                     name={game.name}
                                     bgSrc={game.background_image}
                                     rating={game.rating}
-                                    game={game}
+                                    platforms={game.platforms}
                                 />
                             ))
                         ) : (

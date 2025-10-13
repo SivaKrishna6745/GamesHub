@@ -1,20 +1,39 @@
+import type { platformEntry } from '../types';
 import { Image } from './Image';
+import { platformsSymbols } from '../constants/constants';
+import { getPlatformKey } from '../utils/getPlatformKey';
 
 interface CardProps {
     name: string;
     bgSrc: string;
     rating: number;
+    platforms: platformEntry[];
 }
 
-export const Card = ({ name, bgSrc, rating }: CardProps) => {
+export const Card = ({ name, bgSrc, rating, platforms }: CardProps) => {
+    let currGameSymbols = new Set<string>();
+    platforms.forEach((plat) => {
+        const slug = plat.platform.slug;
+        const groupKey = getPlatformKey(slug);
+        if (!groupKey || currGameSymbols.has(groupKey)) return null;
+        currGameSymbols.add(groupKey);
+    });
     return (
-        <div className="cursor-pointer flex flex-col items-start bg-gray-200 dark:bg-gray-800 rounded-md hover:scale-105 transition-all duration-300 max-h-[400px]">
-            <Image src={bgSrc} width={'100%'} className="rounded-t-md lg:min-h-[250px] lg:max-h-[250px]" />
-            <div className="px-4 text-left flex justify-between items-center gap-4 my-6 w-full">
-                <p className="text-gray-800 dark:text-gray-200 text-xl font-semibold">{name}</p>
-                <p className="text-green-400 text-sm font-semibold bg-gray-300/60 rounded-md px-2 py-1">
-                    {Math.round((rating / 5) * 100)}
-                </p>
+        <div className="cursor-pointer flex flex-col items-start bg-gray-200 dark:bg-gray-800 rounded-md transition-all duration-250 hover:scale-103 shadow-[0_0_4px_rgba(0,0,0,1)] hover:shadow-[3px_3px_12px_rgba(0,0,0,1)]">
+            <Image src={bgSrc} width={'100%'} height={250} className="rounded-t-md h-[300px]" />
+            <div className="flex flex-col gap-4 my-4 px-4 w-full">
+                <div className="flex gap-2">
+                    {Array.from(currGameSymbols).map((symbol) => {
+                        const Icon = platformsSymbols[symbol];
+                        return Icon ? <Icon key={symbol} size={16} title={symbol} color="gray" /> : null;
+                    })}
+                </div>
+                <div className="text-left flex justify-between items-center gap-4 w-full">
+                    <p className="text-gray-800 dark:text-gray-200 text-xl font-semibold">{name}</p>
+                    <p className="text-green-400 text-sm font-semibold bg-gray-300/60 rounded-md px-2 py-1">
+                        {Math.round((rating / 5) * 100)}
+                    </p>
+                </div>
             </div>
         </div>
     );
