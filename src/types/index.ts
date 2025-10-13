@@ -40,7 +40,7 @@ type platform = {
     slug: string;
 };
 
-type platformEntry = {
+export type platformEntry = {
     platform: platform;
 };
 
