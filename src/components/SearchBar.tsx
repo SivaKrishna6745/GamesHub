@@ -4,7 +4,7 @@ interface SearchBarProps {
     label?: string;
 }
 
-export const SearchBar = ({ label = 'Search games...' }: SearchBarProps) => {
+export const SearchBar = ({ label = 'Search for games...' }: SearchBarProps) => {
     return (
         <div className="relative w-full max-w-7xl">
             <span className="absolute top-1/2 -translate-y-1/2 pl-3 text-gray-800 dark:text-gray-200">
