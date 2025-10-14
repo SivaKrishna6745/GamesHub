@@ -1,22 +1,31 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import './App.css';
 import { Image } from './components/Image';
 import { SearchBar } from './components/SearchBar';
 import { Switch } from './components/Switch';
-import { gamesPlatforms, gamesGenres, games } from './api/gamesApi';
+import { getGamesPlatforms, getGamesGenres, getGames } from './api/gamesApi';
 import SideNav from './components/SideNav';
-import type { gameGenre, gamePlatform, gameRes } from './types';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
 import { fetchData } from './utils/utils';
 
 function App() {
-    const [gameGenres, setGamesGenres] = useState<gameGenre[]>([]);
-    const [gamePlatforms, setGamesPlatforms] = useState<gamePlatform[]>([]);
-    const [gamesList, setGamesList] = useState<gameRes[]>([]);
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const { isDark, activePlatform, activeGenre, setIsDark, setActivePlatform } = useGamesStore();
+    const {
+        isDark,
+        activePlatform,
+        activeGenre,
+        errorMessage,
+        gamesGenres,
+        gamesPlatforms,
+        gamesList,
+        setIsDark,
+        setActivePlatform,
+        setErrorMessage,
+        setGamesGenres,
+        setGamesPlatforms,
+        setGamesList,
+    } = useGamesStore();
 
     const toggleDarkMode = () => {
         setIsDark(!isDark);
@@ -27,9 +36,9 @@ function App() {
         const fetchAllData = async () => {
             try {
                 await Promise.all([
-                    fetchData(gamesGenres, setGamesGenres, setErrorMessage),
-                    fetchData(gamesPlatforms, setGamesPlatforms, setErrorMessage),
-                    fetchData(games, setGamesList, setErrorMessage),
+                    fetchData(getGamesGenres, setGamesGenres, setErrorMessage),
+                    fetchData(getGamesPlatforms, setGamesPlatforms, setErrorMessage),
+                    fetchData(getGames, setGamesList, setErrorMessage),
                 ]);
             } catch (error) {
                 console.log(`Error while fetching data: ${error}`);
@@ -77,7 +86,7 @@ function App() {
             </header>
             <main className="grid gap-16 grid-flow-col place-items-start">
                 <SideNav
-                    items={gameGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
+                    items={gamesGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
                     heading={'Genres'}
                     className="w-max"
                 />
@@ -86,7 +95,7 @@ function App() {
                         {activePlatform + ' Games' || 'Games'}
                     </h2>
                     <CustomSelectbox
-                        options={gamePlatforms.map((p) => ({ id: p.id, name: p.name }))}
+                        options={gamesPlatforms.map((p) => ({ id: p.id, name: p.name }))}
                         head={activePlatform || 'Platforms'}
                         onSelect={handleSelect}
                     />
