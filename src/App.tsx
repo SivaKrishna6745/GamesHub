@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { Image } from './components/Image';
 import { SearchBar } from './components/SearchBar';
@@ -9,57 +9,37 @@ import type { gameGenre, gamePlatform, gameRes } from './types';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
+import { fetchData } from './utils/utils';
 
 function App() {
-    const [isDark, setIsDark] = useState(false);
-    const [gameGenres, setGameGenres] = useState<gameGenre[]>([]);
-    const [gamePlatforms, setGamePlatforms] = useState<gamePlatform[]>([]);
+    const [gameGenres, setGamesGenres] = useState<gameGenre[]>([]);
+    const [gamePlatforms, setGamesPlatforms] = useState<gamePlatform[]>([]);
     const [gamesList, setGamesList] = useState<gameRes[]>([]);
-    const [filteredGamesList, setFilteredGameList] = useState<gameRes[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const { activePlatform, activeGenre, setActivePlatform } = useGamesStore();
+    const { isDark, activePlatform, activeGenre, setIsDark, setActivePlatform } = useGamesStore();
 
     const toggleDarkMode = () => {
         setIsDark(!isDark);
         document.documentElement.classList.toggle('dark');
     };
 
-    const getGenres = async () => {
-        try {
-            const data = await gamesGenres();
-            setGameGenres(data);
-        } catch (error) {
-            console.error(error);
-            setErrorMessage(`Failed to load data: ${error}`);
-        }
-    };
-
-    const getPlatforms = async () => {
-        try {
-            const data = await gamesPlatforms();
-            setGamePlatforms(data);
-        } catch (error) {
-            console.error(error);
-            setErrorMessage(`Failed to load data: ${error}`);
-        }
-    };
-    const getGames = async () => {
-        try {
-            const data = await games();
-            setGamesList(data);
-        } catch (error) {
-            console.error(error);
-            setErrorMessage(`Failed to load data: ${error}`);
-        }
-    };
-
     useEffect(() => {
-        getGenres();
-        getPlatforms();
-        getGames();
+        const fetchAllData = async () => {
+            try {
+                await Promise.all([
+                    fetchData(gamesGenres, setGamesGenres, setErrorMessage),
+                    fetchData(gamesPlatforms, setGamesPlatforms, setErrorMessage),
+                    fetchData(games, setGamesList, setErrorMessage),
+                ]);
+            } catch (error) {
+                console.log(`Error while fetching data: ${error}`);
+            }
+        };
+
+        fetchAllData();
     }, []);
 
-    useEffect(() => {
+    const filteredGamesList = useMemo(() => {
         const genreFilter = activeGenre?.toLowerCase();
         const platformFilter = activePlatform?.toLowerCase();
 
@@ -79,7 +59,7 @@ function App() {
             });
         }
 
-        setFilteredGameList(filtered);
+        return filtered;
     }, [activeGenre, activePlatform, gamesList]);
 
     const handleSelect = (option: string) => {
@@ -95,10 +75,11 @@ function App() {
                 <SearchBar />
                 <Switch id="light-dark" label="Dark Mode" onToggle={toggleDarkMode} toggled={isDark} />
             </header>
-            <main className="grid gap-16 grid-flow-col grid-cols-[1fr_3fr] place-items-start">
+            <main className="grid gap-16 grid-flow-col place-items-start">
                 <SideNav
                     items={gameGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
                     heading={'Genres'}
+                    className="w-max"
                 />
                 <div className="flex flex-col items-start gap-4">
                     <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-200">

@@ -12,3 +12,20 @@ export const getPlatformKey = (slugOrName: string) => {
 
     return null;
 };
+
+export const fetchData = async <T>(
+    fetchFunc: () => Promise<T>,
+    setter: React.Dispatch<React.SetStateAction<T>>,
+    errSetter: React.Dispatch<React.SetStateAction<string>>,
+    logError: boolean = true
+) => {
+    try {
+        const data = await fetchFunc();
+        setter(data);
+    } catch (error) {
+        if (logError) {
+            console.error(error);
+        }
+        errSetter(`Failed to load data: ${error instanceof Error ? error.message : error}`);
+    }
+};
