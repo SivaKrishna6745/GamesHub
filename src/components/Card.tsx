@@ -1,7 +1,7 @@
 import type { platformEntry } from '../types';
 import { Image } from './Image';
 import { platformsSymbols } from '../constants/constants';
-import { getPlatformKey } from '../utils/getPlatformKey';
+import { getPlatformKey } from '../utils/utils';
 
 interface CardProps {
     name: string;
