@@ -9,6 +9,7 @@ interface Store {
     gamesList: gameRes[];
     gamesPlatforms: gamePlatform[];
     isDark: boolean;
+    isLoading: boolean;
     setActiveGenre: (genre: string) => void;
     setActivePlatform: (platform: string) => void;
     setErrorMessage: (error: string) => void;
@@ -16,6 +17,7 @@ interface Store {
     setGamesList: (games: gameRes[]) => void;
     setGamesPlatforms: (platforms: gamePlatform[]) => void;
     setIsDark: (value: boolean) => void;
+    setIsLoading: (loading: boolean) => void;
 }
 
 const useGamesStore = create<Store>((set) => ({
@@ -26,6 +28,7 @@ const useGamesStore = create<Store>((set) => ({
     gamesList: [],
     gamesPlatforms: [],
     isDark: false,
+    isLoading: false,
     setActiveGenre: (genre: string) => set({ activeGenre: genre }),
     setActivePlatform: (platform: string) => set({ activePlatform: platform }),
     setErrorMessage: (error: string) => set({ errorMessage: error }),
@@ -33,6 +36,7 @@ const useGamesStore = create<Store>((set) => ({
     setGamesList: (games: gameRes[]) => set({ gamesList: games }),
     setGamesPlatforms: (platforms: gamePlatform[]) => set({ gamesPlatforms: platforms }),
     setIsDark: (isDark: boolean) => set({ isDark: isDark }),
+    setIsLoading: (loading: boolean) => set({ isLoading: loading }),
 }));
 
 export default useGamesStore;

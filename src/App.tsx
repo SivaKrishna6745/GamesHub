@@ -12,19 +12,21 @@ import { fetchData } from './utils/utils';
 
 function App() {
     const {
-        isDark,
-        activePlatform,
         activeGenre,
+        activePlatform,
         errorMessage,
         gamesGenres,
-        gamesPlatforms,
         gamesList,
-        setIsDark,
+        gamesPlatforms,
+        isDark,
+        isLoading,
         setActivePlatform,
         setErrorMessage,
         setGamesGenres,
-        setGamesPlatforms,
         setGamesList,
+        setGamesPlatforms,
+        setIsDark,
+        setIsLoading,
     } = useGamesStore();
 
     const toggleDarkMode = () => {
@@ -34,6 +36,7 @@ function App() {
 
     useEffect(() => {
         const fetchAllData = async () => {
+            setIsLoading(true);
             try {
                 await Promise.all([
                     fetchData(getGamesGenres, setGamesGenres, setErrorMessage),
@@ -42,6 +45,8 @@ function App() {
                 ]);
             } catch (error) {
                 console.log(`Error while fetching data: ${error}`);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -99,7 +104,9 @@ function App() {
                         head={activePlatform || 'Platforms'}
                         onSelect={handleSelect}
                     />
-                    {filteredGamesList.length > 0 ? (
+                    {isLoading ? (
+                        <p className="text-gray-800 dark:text-gray-200">Loading data, please wait..!</p>
+                    ) : filteredGamesList.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {filteredGamesList.map((game) => (
                                 <Card
