@@ -15,8 +15,8 @@ export const getPlatformKey = (slugOrName: string) => {
 
 export const fetchData = async <T>(
     fetchFunc: () => Promise<T>,
-    setter: React.Dispatch<React.SetStateAction<T>>,
-    errSetter: React.Dispatch<React.SetStateAction<string>>,
+    setter: (item: T) => void,
+    errSetter: (error: string) => void,
     logError: boolean = true
 ) => {
     try {
