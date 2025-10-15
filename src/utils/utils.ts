@@ -1,3 +1,5 @@
+import type { FilterType, GameRes } from '../types';
+
 export const getPlatformKey = (slugOrName: string) => {
     const value = slugOrName.toLowerCase();
 
@@ -41,4 +43,18 @@ export const retry = async <T>(func: () => Promise<T>, attempts = 3): Promise<T>
     throw new Error('Failed after retries');
 };
 
-export const normalize = (str: string) => str?.toLowerCase();
+const normalize = (str: string) => str?.toLowerCase();
+
+export const filter = (game: GameRes, filter: string, filterType: FilterType) => {
+    if (!filter) return true;
+    switch (filterType.toLowerCase()) {
+        case 'genre':
+            const gameGenres = game.genres?.map((genre) => normalize(genre.name));
+            return gameGenres.includes(normalize(filter));
+        case 'platform':
+            const gamePlatforms = game.platforms?.map((platform) => normalize(platform.platform.name));
+            return gamePlatforms.includes(normalize(filter));
+        default:
+            return true;
+    }
+};

@@ -1,12 +1,12 @@
-type game = {
+type Game = {
     added: number;
     id: number;
     name: string;
     slug: string;
 };
 
-export type gameGenre = {
-    games: game[];
+export type GameGenre = {
+    games: Game[];
     games_count: number;
     id: number;
     image_background: string;
@@ -14,8 +14,8 @@ export type gameGenre = {
     slug: string;
 };
 
-export type gamePlatform = {
-    games: game[];
+export type GamePlatform = {
+    games: Game[];
     games_count: number;
     id: number;
     image: string;
@@ -26,7 +26,7 @@ export type gamePlatform = {
     year_end: number;
 };
 
-type gameResGenre = {
+type GameResGenre = {
     games_count: number;
     id: string;
     image_background: string;
@@ -34,23 +34,25 @@ type gameResGenre = {
     slug: string;
 };
 
-type platform = {
+type Platform = {
     id: number;
     name: string;
     slug: string;
 };
 
-export type platformEntry = {
-    platform: platform;
+export type PlatformEntry = {
+    platform: Platform;
 };
 
-export type gameRes = {
+export type GameRes = {
     added: number;
     background_image: string;
-    genres: gameResGenre[];
+    genres: GameResGenre[];
     id: number;
     name: string;
-    parentPlatforms: platformEntry[];
-    platforms: platformEntry[];
+    parentPlatforms: PlatformEntry[];
+    platforms: PlatformEntry[];
     rating: number;
 };
+
+export type FilterType = 'genre' | 'platform';

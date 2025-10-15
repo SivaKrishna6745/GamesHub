@@ -8,8 +8,7 @@ import SideNav from './components/SideNav';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
-import { fetchData, retry, normalize } from './utils/utils';
-import type { gameRes } from './types';
+import { fetchData, retry, filter } from './utils/utils';
 
 function App() {
     const activeGenre = useGamesStore((state) => state.activeGenre);
@@ -52,20 +51,10 @@ function App() {
         fetchAllData();
     }, []);
 
-    const filterByGenre = (game: gameRes, gameGenre: string) => {
-        if (!gameGenre) return true;
-        const gameGenres = game.genres?.map((g) => normalize(g.name)) || [];
-        return gameGenres.includes(normalize(gameGenre));
-    };
-
-    const filterByPlatform = (game: gameRes, gamePlatform: string) => {
-        if (!gamePlatform) return true;
-        const gamePlatforms = game.platforms?.map((g) => normalize(g.platform.name)) || [];
-        return gamePlatforms.includes(normalize(gamePlatform));
-    };
-
     const filteredGamesList = useMemo(() => {
-        return gamesList.filter((game) => filterByGenre(game, activeGenre) && filterByPlatform(game, activePlatform));
+        return gamesList.filter(
+            (game) => filter(game, activeGenre, 'genre') && filter(game, activePlatform, 'platform')
+        );
     }, [activeGenre, activePlatform, gamesList]);
 
     const handleSelect = (option: string) => {
