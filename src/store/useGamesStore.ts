@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { GameGenre, GamePlatform, GameRes } from '../types';
+import { persist } from 'zustand/middleware';
 
 interface Store {
     activeGenre: string;
@@ -20,23 +21,28 @@ interface Store {
     setIsLoading: (loading: boolean) => void;
 }
 
-const useGamesStore = create<Store>((set) => ({
-    activePlatform: '',
-    activeGenre: '',
-    errorMessage: '',
-    gamesGenres: [],
-    gamesList: [],
-    gamesPlatforms: [],
-    isDark: false,
-    isLoading: false,
-    setActiveGenre: (genre: string) => set({ activeGenre: genre }),
-    setActivePlatform: (platform: string) => set({ activePlatform: platform }),
-    setErrorMessage: (error: string) => set({ errorMessage: error }),
-    setGamesGenres: (genres: GameGenre[]) => set({ gamesGenres: genres }),
-    setGamesList: (games: GameRes[]) => set({ gamesList: games }),
-    setGamesPlatforms: (platforms: GamePlatform[]) => set({ gamesPlatforms: platforms }),
-    setIsDark: (isDark: boolean) => set({ isDark: isDark }),
-    setIsLoading: (loading: boolean) => set({ isLoading: loading }),
-}));
+const useGamesStore = create<Store>()(
+    persist(
+        (set) => ({
+            activePlatform: '',
+            activeGenre: '',
+            errorMessage: '',
+            gamesGenres: [],
+            gamesList: [],
+            gamesPlatforms: [],
+            isDark: false,
+            isLoading: false,
+            setActiveGenre: (genre: string) => set({ activeGenre: genre }),
+            setActivePlatform: (platform: string) => set({ activePlatform: platform }),
+            setErrorMessage: (error: string) => set({ errorMessage: error }),
+            setGamesGenres: (genres: GameGenre[]) => set({ gamesGenres: genres }),
+            setGamesList: (games: GameRes[]) => set({ gamesList: games }),
+            setGamesPlatforms: (platforms: GamePlatform[]) => set({ gamesPlatforms: platforms }),
+            setIsDark: (isDark: boolean) => set({ isDark: isDark }),
+            setIsLoading: (loading: boolean) => set({ isLoading: loading }),
+        }),
+        { name: 'games-store', partialize: (state) => ({ isDark: state.isDark }) }
+    )
+);
 
 export default useGamesStore;

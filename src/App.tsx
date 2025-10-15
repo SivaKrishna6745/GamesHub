@@ -27,10 +27,9 @@ function App() {
     const setIsDark = useGamesStore((state) => state.setIsDark);
     const setIsLoading = useGamesStore((state) => state.setIsLoading);
 
-    const toggleDarkMode = () => {
-        setIsDark(!isDark);
-        document.documentElement.classList.toggle('dark');
-    };
+    useEffect(() => {
+        document.documentElement.classList.toggle('dark', isDark);
+    }, [isDark]);
 
     useEffect(() => {
         const fetchAllData = async () => {
@@ -68,7 +67,7 @@ function App() {
             <header className="flex items-center justify-between gap-4">
                 <Image src="/src/assets/app-logo.jpg" height={50} width={50} className="rounded-lg" />
                 <SearchBar />
-                <Switch id="light-dark" label="Dark Mode" onToggle={toggleDarkMode} toggled={isDark} />
+                <Switch id="light-dark" label="Dark Mode" onToggle={() => setIsDark(!isDark)} toggled={isDark} />
             </header>
             <main className="grid gap-16 grid-flow-col place-items-start">
                 <SideNav
