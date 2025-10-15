@@ -40,3 +40,5 @@ export const retry = async <T>(func: () => Promise<T>, attempts = 3): Promise<T>
     }
     throw new Error('Failed after retries');
 };
+
+export const normalize = (str: string) => str?.toLowerCase();

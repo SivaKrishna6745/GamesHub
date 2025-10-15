@@ -8,26 +8,25 @@ import SideNav from './components/SideNav';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
-import { fetchData, retry } from './utils/utils';
+import { fetchData, retry, normalize } from './utils/utils';
+import type { gameRes } from './types';
 
 function App() {
-    const {
-        activeGenre,
-        activePlatform,
-        errorMessage,
-        gamesGenres,
-        gamesList,
-        gamesPlatforms,
-        isDark,
-        isLoading,
-        setActivePlatform,
-        setErrorMessage,
-        setGamesGenres,
-        setGamesList,
-        setGamesPlatforms,
-        setIsDark,
-        setIsLoading,
-    } = useGamesStore();
+    const activeGenre = useGamesStore((state) => state.activeGenre);
+    const activePlatform = useGamesStore((state) => state.activePlatform);
+    const errorMessage = useGamesStore((state) => state.errorMessage);
+    const gamesGenres = useGamesStore((state) => state.gamesGenres);
+    const gamesList = useGamesStore((state) => state.gamesList);
+    const gamesPlatforms = useGamesStore((state) => state.gamesPlatforms);
+    const isDark = useGamesStore((state) => state.isDark);
+    const isLoading = useGamesStore((state) => state.isLoading);
+    const setActivePlatform = useGamesStore((state) => state.setActivePlatform);
+    const setErrorMessage = useGamesStore((state) => state.setErrorMessage);
+    const setGamesGenres = useGamesStore((state) => state.setGamesGenres);
+    const setGamesList = useGamesStore((state) => state.setGamesList);
+    const setGamesPlatforms = useGamesStore((state) => state.setGamesPlatforms);
+    const setIsDark = useGamesStore((state) => state.setIsDark);
+    const setIsLoading = useGamesStore((state) => state.setIsLoading);
 
     const toggleDarkMode = () => {
         setIsDark(!isDark);
@@ -53,27 +52,20 @@ function App() {
         fetchAllData();
     }, []);
 
+    const filterByGenre = (game: gameRes, gameGenre: string) => {
+        if (!gameGenre) return true;
+        const gameGenres = game.genres?.map((g) => normalize(g.name)) || [];
+        return gameGenres.includes(normalize(gameGenre));
+    };
+
+    const filterByPlatform = (game: gameRes, gamePlatform: string) => {
+        if (!gamePlatform) return true;
+        const gamePlatforms = game.platforms?.map((g) => normalize(g.platform.name)) || [];
+        return gamePlatforms.includes(normalize(gamePlatform));
+    };
+
     const filteredGamesList = useMemo(() => {
-        const genreFilter = activeGenre?.toLowerCase();
-        const platformFilter = activePlatform?.toLowerCase();
-
-        let filtered = gamesList;
-
-        if (genreFilter) {
-            filtered = filtered.filter((game) => {
-                const gameGenres = game.genres?.map((genre) => genre.name.toLowerCase()) || [];
-                return gameGenres.includes(genreFilter);
-            });
-        }
-
-        if (platformFilter) {
-            filtered = filtered.filter((game) => {
-                const gamePlatforms = game.platforms?.map((p) => p.platform.name.toLowerCase()) || [];
-                return gamePlatforms.includes(platformFilter);
-            });
-        }
-
-        return filtered;
+        return gamesList.filter((game) => filterByGenre(game, activeGenre) && filterByPlatform(game, activePlatform));
     }, [activeGenre, activePlatform, gamesList]);
 
     const handleSelect = (option: string) => {
