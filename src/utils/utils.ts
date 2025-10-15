@@ -29,3 +29,14 @@ export const fetchData = async <T>(
         errSetter(`Failed to load data: ${error instanceof Error ? error.message : error}`);
     }
 };
+
+export const retry = async <T>(func: () => Promise<T>, attempts = 3): Promise<T> => {
+    for (let i = 0; i < attempts; i++) {
+        try {
+            return await func();
+        } catch (error) {
+            if (i === attempts - 1) throw error;
+        }
+    }
+    throw new Error('Failed after retries');
+};

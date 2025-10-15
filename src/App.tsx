@@ -8,7 +8,7 @@ import SideNav from './components/SideNav';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
-import { fetchData } from './utils/utils';
+import { fetchData, retry } from './utils/utils';
 
 function App() {
     const {
@@ -39,9 +39,9 @@ function App() {
             setIsLoading(true);
             try {
                 await Promise.all([
-                    fetchData(getGamesGenres, setGamesGenres, setErrorMessage),
-                    fetchData(getGamesPlatforms, setGamesPlatforms, setErrorMessage),
-                    fetchData(getGames, setGamesList, setErrorMessage),
+                    fetchData(() => retry(getGamesGenres), setGamesGenres, setErrorMessage),
+                    fetchData(() => retry(getGamesPlatforms), setGamesPlatforms, setErrorMessage),
+                    fetchData(() => retry(getGames), setGamesList, setErrorMessage),
                 ]);
             } catch (error) {
                 console.log(`Error while fetching data: ${error}`);
