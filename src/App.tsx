@@ -9,6 +9,7 @@ import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
 import { fetchData, retry, filter } from './utils/utils';
+import { useDeviceFlags } from './hooks/useDeviceFlags';
 
 function App() {
     const activeGenre = useGamesStore((state) => state.activeGenre);
@@ -26,6 +27,8 @@ function App() {
     const setGamesPlatforms = useGamesStore((state) => state.setGamesPlatforms);
     const setIsDark = useGamesStore((state) => state.setIsDark);
     const setIsLoading = useGamesStore((state) => state.setIsLoading);
+
+    const { isMobile, isDesktop } = useDeviceFlags();
 
     useEffect(() => {
         document.documentElement.classList.toggle('dark', isDark);
@@ -66,17 +69,19 @@ function App() {
         <div className="flex flex-col gap-8">
             <header className="flex items-center justify-between gap-4">
                 <Image src="/src/assets/app-logo.jpg" height={50} width={50} className="rounded-lg" />
-                <SearchBar />
+                {isDesktop && <SearchBar />}
                 <Switch id="light-dark" label="Dark Mode" onToggle={() => setIsDark(!isDark)} toggled={isDark} />
             </header>
-            <main className="grid gap-16 grid-flow-col place-items-start">
+            <main className="relative grid gap-4 md:gap-10 lg:gap-16 grid-flow-row md:grid-flow-col place-items-start w-full">
+                {isMobile && <SearchBar />}
                 <SideNav
                     items={gamesGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
                     heading={'Genres'}
-                    className="w-max"
+                    className="hidden md:block w-max"
+                    mobileNav={isMobile}
                 />
                 <div className="flex flex-col items-start gap-4">
-                    <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-200">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 dark:text-gray-200">
                         {activePlatform + ' Games' || 'Games'}
                     </h2>
                     <CustomSelectbox
