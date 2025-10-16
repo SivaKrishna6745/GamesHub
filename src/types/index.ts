@@ -56,3 +56,5 @@ export type GameRes = {
 };
 
 export type FilterType = 'genre' | 'platform';
+
+export type DeviceType = 'mobile' | 'tablet' | 'desktop';

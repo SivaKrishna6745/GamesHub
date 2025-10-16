@@ -1,10 +1,11 @@
 import { create } from 'zustand';
-import type { GameGenre, GamePlatform, GameRes } from '../types';
+import type { DeviceType, GameGenre, GamePlatform, GameRes } from '../types';
 import { persist } from 'zustand/middleware';
 
 interface Store {
     activeGenre: string;
     activePlatform: string;
+    deviceType: DeviceType;
     errorMessage: string;
     gamesGenres: GameGenre[];
     gamesList: GameRes[];
@@ -13,6 +14,7 @@ interface Store {
     isLoading: boolean;
     setActiveGenre: (genre: string) => void;
     setActivePlatform: (platform: string) => void;
+    setDeviceType: (type: DeviceType) => void;
     setErrorMessage: (error: string) => void;
     setGamesGenres: (genres: GameGenre[]) => void;
     setGamesList: (games: GameRes[]) => void;
@@ -32,8 +34,10 @@ const useGamesStore = create<Store>()(
             gamesPlatforms: [],
             isDark: false,
             isLoading: false,
+            deviceType: 'desktop',
             setActiveGenre: (genre: string) => set({ activeGenre: genre }),
             setActivePlatform: (platform: string) => set({ activePlatform: platform }),
+            setDeviceType: (type: DeviceType) => set({ deviceType: type }),
             setErrorMessage: (error: string) => set({ errorMessage: error }),
             setGamesGenres: (genres: GameGenre[]) => set({ gamesGenres: genres }),
             setGamesList: (games: GameRes[]) => set({ gamesList: games }),
