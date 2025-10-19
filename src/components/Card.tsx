@@ -1,4 +1,4 @@
-import type { platformEntry } from '../types';
+import type { PlatformEntry } from '../types';
 import { Image } from './Image';
 import { platformsSymbols } from '../constants/constants';
 import { getPlatformKey } from '../utils/utils';
@@ -7,7 +7,7 @@ interface CardProps {
     name: string;
     bgSrc: string;
     rating: number;
-    platforms: platformEntry[];
+    platforms: PlatformEntry[];
 }
 
 export const Card = ({ name, bgSrc, rating, platforms }: CardProps) => {
