@@ -92,7 +92,7 @@ function App() {
                     {isLoading ? (
                         <p className="text-gray-800 dark:text-gray-200">Loading data, please wait..!</p>
                     ) : filteredGamesList.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-40">
                             {filteredGamesList.map((game) => (
                                 <Card
                                     key={game.id}

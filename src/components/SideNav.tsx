@@ -37,7 +37,7 @@ const SideNav = ({ heading, items, className, mobileNav }: SideNavProps) => {
             <nav
                 className={`sticky top-0 -left-4 -right-4 z-50 overflow-x-auto w-full ${
                     isStuck
-                        ? 'bg-white/90 dark:bg-slate-900 p-4 [box-shadow:-2px_1px_5px_rgba(0,0,0,1),2px_1px_5px_rgba(0,0,0,1)]'
+                        ? 'z-60 bg-white/90 dark:bg-slate-900 p-4 [box-shadow:-2px_1px_5px_rgba(0,0,0,1),2px_1px_5px_rgba(0,0,0,1)]'
                         : ''
                 }`}
                 ref={navRef}
