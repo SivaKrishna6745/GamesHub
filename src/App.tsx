@@ -10,6 +10,7 @@ import useGamesStore from './store/useGamesStore';
 import { Card } from './components/Card';
 import { fetchData, retry, filter } from './utils/utils';
 import { useDeviceFlags } from './hooks/useDeviceFlags';
+import useDebounce from './hooks/useDebounce';
 
 function App() {
     const activeGenre = useGamesStore((state) => state.activeGenre);
@@ -20,6 +21,8 @@ function App() {
     const gamesPlatforms = useGamesStore((state) => state.gamesPlatforms);
     const isDark = useGamesStore((state) => state.isDark);
     const isLoading = useGamesStore((state) => state.isLoading);
+    const searchTerm = useGamesStore((state) => state.searchTerm);
+
     const setActivePlatform = useGamesStore((state) => state.setActivePlatform);
     const setErrorMessage = useGamesStore((state) => state.setErrorMessage);
     const setGamesGenres = useGamesStore((state) => state.setGamesGenres);
@@ -28,6 +31,7 @@ function App() {
     const setIsDark = useGamesStore((state) => state.setIsDark);
     const setIsLoading = useGamesStore((state) => state.setIsLoading);
 
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const { isMobile, isDesktop } = useDeviceFlags();
 
     useEffect(() => {
@@ -58,6 +62,16 @@ function App() {
             (game) => filter(game, activeGenre, 'genre') && filter(game, activePlatform, 'platform')
         );
     }, [activeGenre, activePlatform, gamesList]);
+    console.log('filtered', filteredGamesList);
+
+    const searchFilteredGamesList = useMemo(() => {
+        if (!debouncedSearchTerm || debouncedSearchTerm.trim() === '') {
+            console.log('if', filteredGamesList);
+            return filteredGamesList;
+        }
+
+        return filteredGamesList.filter((game) => game.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
+    }, [debouncedSearchTerm, filteredGamesList]);
 
     const handleSelect = (option: string) => {
         setActivePlatform(option);
@@ -91,9 +105,9 @@ function App() {
                     />
                     {isLoading ? (
                         <p className="text-gray-800 dark:text-gray-200">Loading data, please wait..!</p>
-                    ) : filteredGamesList.length > 0 ? (
+                    ) : searchFilteredGamesList.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-40">
-                            {filteredGamesList.map((game) => (
+                            {searchFilteredGamesList.map((game) => (
                                 <Card
                                     key={game.id}
                                     name={game.name}

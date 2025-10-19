@@ -12,6 +12,7 @@ interface Store {
     gamesPlatforms: GamePlatform[];
     isDark: boolean;
     isLoading: boolean;
+    searchTerm: string;
     setActiveGenre: (genre: string) => void;
     setActivePlatform: (platform: string) => void;
     setDeviceType: (type: DeviceType) => void;
@@ -21,6 +22,7 @@ interface Store {
     setGamesPlatforms: (platforms: GamePlatform[]) => void;
     setIsDark: (value: boolean) => void;
     setIsLoading: (loading: boolean) => void;
+    setSearchTerm: (term: string) => void;
 }
 
 const useGamesStore = create<Store>()(
@@ -35,6 +37,7 @@ const useGamesStore = create<Store>()(
             isDark: false,
             isLoading: false,
             deviceType: 'desktop',
+            searchTerm: '',
             setActiveGenre: (genre: string) => set({ activeGenre: genre }),
             setActivePlatform: (platform: string) => set({ activePlatform: platform }),
             setDeviceType: (type: DeviceType) => set({ deviceType: type }),
@@ -44,6 +47,7 @@ const useGamesStore = create<Store>()(
             setGamesPlatforms: (platforms: GamePlatform[]) => set({ gamesPlatforms: platforms }),
             setIsDark: (isDark: boolean) => set({ isDark: isDark }),
             setIsLoading: (loading: boolean) => set({ isLoading: loading }),
+            setSearchTerm: (term: string) => set({ searchTerm: term }),
         }),
         { name: 'games-store', partialize: (state) => ({ isDark: state.isDark }) }
     )
