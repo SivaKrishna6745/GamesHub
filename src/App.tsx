@@ -11,6 +11,7 @@ import { Card } from './components/Card';
 import { fetchData, retry, filter } from './utils/utils';
 import { useDeviceFlags } from './hooks/useDeviceFlags';
 import useDebounce from './hooks/useDebounce';
+import { Shimmer } from './components/Shimmer';
 
 function App() {
     const activeGenre = useGamesStore((state) => state.activeGenre);
@@ -62,11 +63,9 @@ function App() {
             (game) => filter(game, activeGenre, 'genre') && filter(game, activePlatform, 'platform')
         );
     }, [activeGenre, activePlatform, gamesList]);
-    console.log('filtered', filteredGamesList);
 
     const searchFilteredGamesList = useMemo(() => {
         if (!debouncedSearchTerm || debouncedSearchTerm.trim() === '') {
-            console.log('if', filteredGamesList);
             return filteredGamesList;
         }
 
@@ -86,15 +85,19 @@ function App() {
                 {isDesktop && <SearchBar />}
                 <Switch id="light-dark" label="Dark Mode" onToggle={() => setIsDark(!isDark)} toggled={isDark} />
             </header>
-            <main className="relative grid gap-4 md:gap-10 lg:gap-16 grid-flow-row md:grid-flow-col place-items-start w-full">
+            <main className="relative grid gap-4 md:gap-10 lg:gap-16 grid-flow-row md:grid-flow-col lg:grid-cols-4 place-items-start w-full">
                 {isMobile && <SearchBar />}
-                <SideNav
-                    items={gamesGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
-                    heading={'Genres'}
-                    className="hidden md:block w-max"
-                    mobileNav={isMobile}
-                />
-                <div className="flex flex-col items-start gap-4">
+                {isLoading ? (
+                    <Shimmer variant={isMobile ? 'mobile-nav' : 'desktop-nav'} />
+                ) : (
+                    <SideNav
+                        items={gamesGenres?.map((g) => ({ id: g.id, name: g.name, src: g.image_background }))}
+                        heading={'Genres'}
+                        className="hidden md:block w-max"
+                        mobileNav={isMobile}
+                    />
+                )}
+                <div className="flex flex-col items-start gap-4 w-full md:col-span-3">
                     <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 dark:text-gray-200">
                         {activePlatform + ' Games' || 'Games'}
                     </h2>
@@ -104,7 +107,7 @@ function App() {
                         onSelect={handleSelect}
                     />
                     {isLoading ? (
-                        <p className="text-gray-800 dark:text-gray-200">Loading data, please wait..!</p>
+                        <Shimmer variant="card" />
                     ) : searchFilteredGamesList.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-40">
                             {searchFilteredGamesList.map((game) => (
