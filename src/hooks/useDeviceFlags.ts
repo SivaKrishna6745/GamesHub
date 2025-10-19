@@ -15,6 +15,7 @@ export const useDeviceFlags = () => {
                 setDeviceType('desktop');
             }
         };
+        resizeListener();
         window.addEventListener('resize', resizeListener);
         return () => {
             window.removeEventListener('resize', resizeListener);
