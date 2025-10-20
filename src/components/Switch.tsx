@@ -11,7 +11,7 @@ export const Switch = ({ id = 'switch-toggle', label, onToggle, toggled }: Switc
             <input type="checkbox" className="sr-only peer" id={id} onChange={onToggle} />
             <label
                 htmlFor={id}
-                className={`cursor-pointer h-5 !w-10 inline-flex items-center border border-black dark:border-none rounded-full ${
+                className={`cursor-pointer h-5 w-10 inline-flex shrink-0 items-center border border-black dark:border-none rounded-full ${
                     toggled && 'bg-green-500'
                 }`}
             >
