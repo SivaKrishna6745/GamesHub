@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "https://SivaKrishna6745.github.io/GamesHub",
+    "homepage": "https://SivaKrishna6745.github.io/games-hub",
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
