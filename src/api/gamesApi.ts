@@ -1,8 +1,8 @@
-import { type gameGenre, type gamePlatform, type gameRes } from '../types';
+import { type GameGenre, type GamePlatform, type GameRes } from '../types';
 
 const API_KEY = import.meta.env.VITE_GAMES_API_KEY;
 
-export const getGamesGenres = async (): Promise<gameGenre[]> => {
+export const getGamesGenres = async (): Promise<GameGenre[]> => {
     const response = await fetch(`https://api.rawg.io/api/genres?key=${API_KEY}`);
 
     if (!response.ok) {
@@ -13,7 +13,7 @@ export const getGamesGenres = async (): Promise<gameGenre[]> => {
     return data.results;
 };
 
-export const getGamesPlatforms = async (): Promise<gamePlatform[]> => {
+export const getGamesPlatforms = async (): Promise<GamePlatform[]> => {
     const response = await fetch(`https://api.rawg.io/api/platforms?key=${API_KEY}`);
 
     if (!response.ok) {
@@ -24,7 +24,7 @@ export const getGamesPlatforms = async (): Promise<gamePlatform[]> => {
     return data.results;
 };
 
-export const getGames = async (): Promise<gameRes[]> => {
+export const getGames = async (): Promise<GameRes[]> => {
     const response = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}`);
 
     if (!response.ok) {
