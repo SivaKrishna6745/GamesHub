@@ -17,7 +17,7 @@ interface SideNavProps {
 }
 
 const SideNav = ({ heading, items, className, mobileNav }: SideNavProps) => {
-    const { setActiveGenre } = useGamesStore();
+    const { activeGenre, setActiveGenre } = useGamesStore();
     const navRef = useRef<HTMLDivElement>(null);
     const [isStuck, setIsStuck] = useState<boolean>(false);
 
@@ -48,10 +48,13 @@ const SideNav = ({ heading, items, className, mobileNav }: SideNavProps) => {
                         return (
                             <li
                                 key={item.id}
-                                className="flex flex-col items-center gap-2 text-sm text-gray-800 dark:text-gray-200"
+                                className={`flex flex-col items-center gap-2 text-sm text-gray-800 dark:text-gray-200 cursor-pointer ${
+                                    activeGenre === item.name && 'font-bold'
+                                }`}
+                                onClick={() => setActiveGenre(item.name)}
                             >
                                 <Image src={item.src} className="rounded-lg h-10 w-10" />
-                                <Button label={item.name} onClick={() => setActiveGenre(item.name)} />
+                                <Button label={item.name} />
                             </li>
                         );
                     })}
@@ -65,9 +68,15 @@ const SideNav = ({ heading, items, className, mobileNav }: SideNavProps) => {
             <ul className="flex flex-col gap-5">
                 {items.map((item) => {
                     return (
-                        <li key={item.id} className="flex items-center gap-4 text-gray-800 dark:text-gray-200">
+                        <li
+                            key={item.id}
+                            className={`flex items-center gap-4 text-gray-800 dark:text-gray-200 cursor-pointer ${
+                                activeGenre === item.name && 'font-bold'
+                            }`}
+                            onClick={() => setActiveGenre(item.name)}
+                        >
                             <Image src={item.src} className="rounded-lg h-10 w-10" />
-                            <Button label={item.name} onClick={() => setActiveGenre(item.name)} />
+                            <Button label={item.name} />
                         </li>
                     );
                 })}
