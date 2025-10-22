@@ -26,7 +26,7 @@ const useIntersectionObserver = ({ threshold = 0, root = null, rootMargin = '0px
         observer.observe(ref.current);
 
         return () => observer.disconnect();
-    }, [ref.current, root, rootMargin, threshold]);
+    }, [root, rootMargin, threshold]);
 
     return { ref, isIntersecting };
 };
