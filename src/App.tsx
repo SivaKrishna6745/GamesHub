@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { Image } from './components/Image';
 import { SearchBar } from './components/SearchBar';
 import { Switch } from './components/Switch';
-import { getGamesPlatforms, getGamesGenres, getGames } from './api/gamesApi';
+import { getGamesPlatforms, getGamesGenres, getGames, loadMoreGames } from './api/gamesApi';
 import SideNav from './components/SideNav';
 import CustomSelectbox from './components/CustomSelectbox';
 import useGamesStore from './store/useGamesStore';
@@ -13,6 +13,7 @@ import { useDeviceFlags } from './hooks/useDeviceFlags';
 import useDebounce from './hooks/useDebounce';
 import { Shimmer } from './components/Shimmer';
 import AppLogo from './assets/app-logo.jpg';
+import useIntersectionObserver from './hooks/useIntersectionObserver';
 
 function App() {
     const activeGenre = useGamesStore((state) => state.activeGenre);
@@ -36,9 +37,25 @@ function App() {
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const { isMobile, isDesktop } = useDeviceFlags();
 
+    const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
+    const { ref, isIntersecting } = useIntersectionObserver({ threshold: 0.5 });
+    const [page, setPage] = useState<number>(1);
+
     useEffect(() => {
         document.documentElement.classList.toggle('dark', isDark);
     }, [isDark]);
+
+    useEffect(() => {
+        if (isIntersecting && !isFetchingMore) {
+            setIsFetchingMore(true);
+            loadMoreGames(page + 1)
+                .then((newGames) => {
+                    setGamesList([...gamesList, ...newGames]);
+                    setPage((prev) => prev + 1);
+                })
+                .finally(() => setIsFetchingMore(false));
+        }
+    }, [isIntersecting]);
 
     useEffect(() => {
         const fetchAllData = async () => {
@@ -110,17 +127,21 @@ function App() {
                     {isLoading ? (
                         <Shimmer variant="card" />
                     ) : searchFilteredGamesList.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-40">
-                            {searchFilteredGamesList.map((game) => (
-                                <Card
-                                    key={game.id}
-                                    name={game.name}
-                                    bgSrc={game.background_image}
-                                    rating={game.rating}
-                                    platforms={game.platforms}
-                                />
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-40">
+                                {searchFilteredGamesList.map((game) => (
+                                    <Card
+                                        key={game.id}
+                                        name={game.name}
+                                        bgSrc={game.background_image}
+                                        rating={game.rating}
+                                        platforms={game.platforms}
+                                    />
+                                ))}
+                            </div>
+                            {isFetchingMore && <Shimmer variant="card" />}
+                            <div ref={ref} className="h-1" />
+                        </>
                     ) : (
                         <p className="my-10 text-gray-800 dark:text-gray-200 text-2xl">No Games Available!!</p>
                     )}
