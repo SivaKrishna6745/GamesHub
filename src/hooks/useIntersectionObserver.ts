@@ -7,11 +7,9 @@ type ObserverOptions = {
 };
 
 const useIntersectionObserver = ({ threshold = 0, root = null, rootMargin = '0px' }: ObserverOptions) => {
-    console.log('inside intersection observer');
     const ref = useRef<HTMLDivElement | null>(null);
     const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
     useEffect(() => {
-        console.log('inside use effect');
         if (!ref.current) return;
 
         const observer = new IntersectionObserver(
