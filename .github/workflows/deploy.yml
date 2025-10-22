@@ -8,6 +8,8 @@ on:
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
+        env:
+            VITE_GAMES_API_KEY: ${{ secrets.VITE_GAMES_API_KEY }}
         permissions:
             contents: write
 
