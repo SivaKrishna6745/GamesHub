@@ -1,24 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type IntersectionObserverProps = {
-    ref: React.RefObject<HTMLDivElement | null>;
     threshold?: number;
     root?: Element | null;
     rootMargin?: string;
 };
 
 const useIntersectionObserver = ({
-    ref,
     threshold = 0.5,
     root = null,
     rootMargin = '0px',
-}: IntersectionObserverProps) => {
+}: IntersectionObserverProps = {}) => {
     const [isIntersecting, setIsIntersecting] = useState(false);
 
-    useEffect(() => {
-        const target = ref.current;
-        if (!target) {
-            console.log('Observer element not ready', ref, ref.current);
+    const ref = useCallback((node: HTMLDivElement) => {
+        if (!node) {
+            console.log('Observer element not ready', node);
             return;
         }
 
@@ -36,12 +33,12 @@ const useIntersectionObserver = ({
 
         const observer = new IntersectionObserver(callback, options);
 
-        observer.observe(target);
+        observer.observe(node);
 
         return () => observer.disconnect();
-    }, [ref.current]);
+    }, []);
 
-    return { isIntersecting };
+    return { ref, isIntersecting };
 };
 
 export default useIntersectionObserver;
