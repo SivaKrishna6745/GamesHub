@@ -12,7 +12,10 @@ const useIntersectionObserver = ({ threshold = 0.5, root = null, rootMargin = '0
 
     useEffect(() => {
         const target = ref.current;
-        if (!target) return;
+        if (!target) {
+            console.log('Observer element not ready', ref, ref.current);
+            return;
+        }
 
         const observer = new IntersectionObserver(
             ([entry]) => {
