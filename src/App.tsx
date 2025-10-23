@@ -140,7 +140,7 @@ function App() {
                                 ))}
                             </div>
                             {isFetchingMore && <Shimmer variant="card" />}
-                            <div ref={ref} className="h-2 mt-1" />
+                            <div ref={ref} className="h-2" />
                         </>
                     ) : (
                         <p className="my-10 text-gray-800 dark:text-gray-200 text-2xl">No Games Available!!</p>

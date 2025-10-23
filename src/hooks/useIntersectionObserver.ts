@@ -15,7 +15,7 @@ const useIntersectionObserver = ({
 
     const ref = useCallback((node: HTMLDivElement) => {
         if (!node) {
-            console.log('Observer element not ready', node);
+            console.log('Observer element not ready');
             return;
         }
 
@@ -27,7 +27,7 @@ const useIntersectionObserver = ({
 
         const callback: IntersectionObserverCallback = (entries) => {
             const [entry] = entries;
-            console.log('✅ OBSERVER TRIGGERED', entry.target, entry.isIntersecting);
+            console.log('✅ OBSERVER TRIGGERED');
             setIsIntersecting(entry.isIntersecting);
         };
 
