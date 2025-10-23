@@ -38,7 +38,7 @@ function App() {
     const { isMobile, isDesktop } = useDeviceFlags();
 
     const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
-    const { ref, isIntersecting } = useIntersectionObserver();
+    const { ref, isIntersecting } = useIntersectionObserver({ rootMargin: '50px' });
     const [page, setPage] = useState<number>(1);
 
     useEffect(() => {
@@ -129,18 +129,18 @@ function App() {
                     ) : searchFilteredGamesList.length > 0 ? (
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 z-40">
-                                {searchFilteredGamesList.map((game) => (
+                                {searchFilteredGamesList.map((game, index) => (
                                     <Card
                                         key={game.id}
                                         name={game.name}
                                         bgSrc={game.background_image}
                                         rating={game.rating}
                                         platforms={game.platforms}
+                                        ref={index === gamesList.length - 1 ? ref : null}
                                     />
                                 ))}
                             </div>
                             {isFetchingMore && <Shimmer variant="card" />}
-                            <div ref={ref} className="h-2" />
                         </>
                     ) : (
                         <p className="my-10 text-gray-800 dark:text-gray-200 text-2xl">No Games Available!!</p>

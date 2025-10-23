@@ -2,15 +2,17 @@ import type { PlatformEntry } from '../types';
 import { Image } from './Image';
 import { platformsSymbols } from '../constants/constants';
 import { getPlatformKey } from '../utils/utils';
+import type { Ref } from 'react';
 
 interface CardProps {
     name: string;
     bgSrc: string;
     rating: number;
     platforms: PlatformEntry[];
+    ref?: Ref<HTMLDivElement | null>;
 }
 
-export const Card = ({ name, bgSrc, rating, platforms }: CardProps) => {
+export const Card = ({ name, bgSrc, rating, platforms, ref }: CardProps) => {
     let currGameSymbols = new Set<string>();
     platforms.forEach((plat) => {
         const slug = plat.platform.slug;
@@ -19,7 +21,10 @@ export const Card = ({ name, bgSrc, rating, platforms }: CardProps) => {
         currGameSymbols.add(groupKey);
     });
     return (
-        <div className="cursor-pointer flex flex-col items-start bg-gray-200 dark:bg-gray-800 rounded-md transition-all duration-250 hover:scale-103 shadow-[0_0_4px_rgba(0,0,0,1)] hover:shadow-[3px_3px_12px_rgba(0,0,0,1)]">
+        <div
+            ref={ref}
+            className="cursor-pointer flex flex-col items-start bg-gray-200 dark:bg-gray-800 rounded-md transition-all duration-250 hover:scale-103 shadow-[0_0_4px_rgba(0,0,0,1)] hover:shadow-[3px_3px_12px_rgba(0,0,0,1)]"
+        >
             <Image src={bgSrc} width={'100%'} height={250} className="rounded-t-md h-[300px]" />
             <div className="flex flex-col gap-4 my-4 px-4 w-full">
                 <div className="flex gap-2">

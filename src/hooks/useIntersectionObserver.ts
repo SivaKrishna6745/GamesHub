@@ -13,7 +13,7 @@ const useIntersectionObserver = ({
 }: IntersectionObserverProps = {}) => {
     const [isIntersecting, setIsIntersecting] = useState(false);
 
-    const ref = useCallback((node: HTMLDivElement) => {
+    const ref = useCallback((node: HTMLDivElement | null) => {
         if (!node) {
             console.log('Observer element not ready');
             return;
