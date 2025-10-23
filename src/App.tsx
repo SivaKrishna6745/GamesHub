@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import { Image } from './components/Image';
 import { SearchBar } from './components/SearchBar';
@@ -38,7 +38,8 @@ function App() {
     const { isMobile, isDesktop } = useDeviceFlags();
 
     const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
-    const { ref, isIntersecting } = useIntersectionObserver({ threshold: 0.5 });
+    const intersectRef = useRef<HTMLDivElement>(null);
+    const { isIntersecting } = useIntersectionObserver({ ref: intersectRef });
     const [page, setPage] = useState<number>(1);
 
     useEffect(() => {
@@ -140,7 +141,7 @@ function App() {
                                 ))}
                             </div>
                             {isFetchingMore && <Shimmer variant="card" />}
-                            <div ref={ref} className="h-1" />
+                            <div ref={intersectRef} className="h-1" />
                         </>
                     ) : (
                         <p className="my-10 text-gray-800 dark:text-gray-200 text-2xl">No Games Available!!</p>

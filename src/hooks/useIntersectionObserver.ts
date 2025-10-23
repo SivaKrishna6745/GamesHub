@@ -1,13 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-type ObserverOptions = {
+type IntersectionObserverProps = {
+    ref: React.RefObject<HTMLDivElement | null>;
     threshold?: number;
     root?: Element | null;
     rootMargin?: string;
 };
 
-const useIntersectionObserver = ({ threshold = 0.5, root = null, rootMargin = '0px' }: ObserverOptions = {}) => {
-    const ref = useRef<HTMLDivElement | null>(null);
+const useIntersectionObserver = ({
+    ref,
+    threshold = 0.5,
+    root = null,
+    rootMargin = '0px',
+}: IntersectionObserverProps) => {
     const [isIntersecting, setIsIntersecting] = useState(false);
 
     useEffect(() => {
@@ -17,20 +22,26 @@ const useIntersectionObserver = ({ threshold = 0.5, root = null, rootMargin = '0
             return;
         }
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                console.log('✅ Hook triggered:', entry.isIntersecting);
-                setIsIntersecting(entry.isIntersecting);
-            },
-            { root, rootMargin, threshold }
-        );
+        const options = {
+            threshold,
+            root,
+            rootMargin,
+        };
+
+        const callback: IntersectionObserverCallback = (entries) => {
+            const [entry] = entries;
+            console.log('✅ OBSERVER TRIGGERED', entry.target, entry.isIntersecting);
+            setIsIntersecting(entry.isIntersecting);
+        };
+
+        const observer = new IntersectionObserver(callback, options);
 
         observer.observe(target);
 
         return () => observer.disconnect();
-    }, [ref.current, root, rootMargin, threshold]);
+    }, [ref.current]);
 
-    return { ref, isIntersecting };
+    return { isIntersecting };
 };
 
 export default useIntersectionObserver;
