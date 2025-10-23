@@ -6,7 +6,7 @@ type ObserverOptions = {
     rootMargin?: string;
 };
 
-const useIntersectionObserver = ({ threshold = 0, root = null, rootMargin = '0px' }: ObserverOptions) => {
+const useIntersectionObserver = ({ threshold = 0.5, root = null, rootMargin = '0px' }: ObserverOptions) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
     useEffect(() => {
