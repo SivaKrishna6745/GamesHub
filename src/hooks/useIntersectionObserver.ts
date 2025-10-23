@@ -6,27 +6,26 @@ type ObserverOptions = {
     rootMargin?: string;
 };
 
-const useIntersectionObserver = ({ threshold = 0.5, root = null, rootMargin = '0px' }: ObserverOptions) => {
+const useIntersectionObserver = ({ threshold = 0.5, root = null, rootMargin = '0px' }: ObserverOptions = {}) => {
     const ref = useRef<HTMLDivElement | null>(null);
-    const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
+    const [isIntersecting, setIsIntersecting] = useState(false);
+
     useEffect(() => {
-        if (!ref.current) return;
+        const target = ref.current;
+        if (!target) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
+                console.log('✅ Hook triggered:', entry.isIntersecting);
                 setIsIntersecting(entry.isIntersecting);
             },
-            {
-                root,
-                rootMargin,
-                threshold,
-            }
+            { root, rootMargin, threshold }
         );
 
-        observer.observe(ref.current);
+        observer.observe(target);
 
         return () => observer.disconnect();
-    }, [root, rootMargin, threshold]);
+    }, [ref.current, root, rootMargin, threshold]);
 
     return { ref, isIntersecting };
 };
